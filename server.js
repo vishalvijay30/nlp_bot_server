@@ -20,6 +20,6 @@ app.post('/webhook', (req, res) => {
     console.log(JSON.stringify('request'));
 });
 
-app.listen(process.env.port || PORT, () => {
+app.listen(process.env.PORT || PORT, () => {
     console.log("Listening on port", PORT);
 });
