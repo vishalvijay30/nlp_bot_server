@@ -1,11 +1,16 @@
 //NPM imports
 const express = require('express');
+const bodyParser = require('body-parser');
 
-//create express app
+//create and setup express app
 const app = express();
+app.use(bodyParser.json());
 
-//Local config
-const PORT = 3000;
+//Local constants
+const port = process.env.PORT || 3000;
+
+//Local imports
+const webhook = require('./webhook');
 
 app.get('/', (req, res) => {
     res.send("Welcome to the Webhook");
@@ -16,10 +21,10 @@ app.get('/ping', (req, res) => {
 });
 
 app.post('/webhook', (req, res) => {
-    res.send("reached webhook endpoint");
-    console.log(JSON.stringify('request'));
+    console.log("reached webhook endpoint with a POST request " + JSON.stringify(req));
+    webhook.process(req, res);
 });
 
-app.listen(process.env.PORT || PORT, () => {
-    console.log("Listening on port", PORT);
+app.listen(port, () => {
+    console.log("Listening on port", port);
 });
