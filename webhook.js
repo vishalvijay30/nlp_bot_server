@@ -1,6 +1,6 @@
 module.exports = {
     process: (req, res) => {
-        const timePeriod = req.body.result.parameters.date-period;
+        const timePeriod = req.body.result.parameters.period;
         // const state;
         // const agenda;
         // if (req.body.result.parameters.geo-state-us !== '') {
