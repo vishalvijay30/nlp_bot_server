@@ -21,7 +21,7 @@ app.get('/ping', (req, res) => {
 });
 
 app.post('/webhook', (req, res) => {
-    console.log("reached webhook endpoint with a POST request " + JSON.stringify(req));
+    console.log("reached webhook endpoint with a POST request");
     webhook.process(req, res);
 });
 
