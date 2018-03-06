@@ -1,21 +1,43 @@
+//npm imports
+const AWS = require('aws-sdk');
+
+//local imports
+const consts =  require('./constants');
+
+//aws config
+AWS.config.update({ region: 'us-east-2' });
+
 module.exports = {
-    process: (req, res) => {
-        const timePeriod = req.body.result.parameters.period;
-        // const state;
-        // const agenda;
-        // if (req.body.result.parameters.geo-state-us !== '') {
-        //     state = req.body.result.parameters.geo-state-us;
-        // }
+    fulfill: (req, res) => {
+        //figure out where in the conversation you are
+        let action = req.body.result.action;
+        let id;
+        if (action === 'setup') {
+            console.log("setup invoked from webhook");
 
-        // if (req.body.result.parameters.policy-agenda !== '') {
-        //     agenda = req.body.result.parameters.geo-state-us;
-        // }
+            let inputs = req.body.result.parameters;
+            console.log("reached with params", inputs);
 
-        if (timePeriod.substring(0, 4) === '1920') {
-            let fulfillment = {};
-            fulfillment.speech = "What genre of music became incredibly popular during the 1920s?";
-            fulfillment.displayText = "What genre of music became incredibly popular during the 1920s?";
-            res.json(fulfillment);
+            let level = inputs.level;
+            let subject = inputs.subject;
+            id = Math.floor(Math.random() * consts.NUM_MS_QUESTIONS);
+            params = {
+                Key: {
+                    "id": {
+                        N: id.toString()
+                    }
+                },
+                TableName: "ms_questions"
+            }
+            const dynamodb = new AWS.DynamoDB();
+            dynamodb.getItem(params, (err, data) => {
+                if (err) {
+                    console.log("dynamodb query errors", err);
+                } else {
+                    console.log("dynamodb query data", data);
+                    res.json({ "data": data });
+                }
+            });
         }
     }
 }

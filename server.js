@@ -13,7 +13,7 @@ const port = process.env.PORT || 3000;
 const webhook = require('./webhook');
 
 app.get('/', (req, res) => {
-    res.send("Welcome to the Webhook");
+    res.send("Welcome to the Webhook!");
 });
 
 app.get('/ping', (req, res) => {
@@ -22,7 +22,7 @@ app.get('/ping', (req, res) => {
 
 app.post('/webhook', (req, res) => {
     console.log("reached webhook endpoint with a POST request");
-    webhook.process(req, res);
+    webhook.fulfill(req, res);
 });
 
 app.listen(port, () => {
