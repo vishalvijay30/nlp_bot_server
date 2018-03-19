@@ -33,8 +33,8 @@ module.exports = {
         });
     },
 
-    check_answer: (id, user_answer, original_answer) => {
-        return user_answer === original_answer;
+    check_answer: (user_answer, original_answer) => {
+        return user_answer.ignoreCase === original_answer.ignoreCase;
     },
 
     send_dialogflow_response: (speech, display_text, follow_up_event, res) => {
