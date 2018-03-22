@@ -3,11 +3,21 @@
 *         to obtain values dynamically from AWS in the future
 */
 module.exports = {
-    NUM_ASTRONOMY_QUESTIONS: 50,
-    NUM_BIOLOGY_QUESTIONS: 310,
-    NUM_CHEMISTRY_QUESTIONS: 83,
-    NUM_EARTH_SCIENCE_QUESTIONS: 65,
-    NUM_ENERGY_QUESTIONS: 72,
-    NUM_PHYSICS_QUESTIONS:65,
-    NUM_MS_QUESTIONS: 295
+    num_questions: (input) => {
+        if (input === "astronomy") {
+            return 50;
+        } else if (input === "biology") {
+            return 310;
+        } else if (input === "chemistry") {
+            return 83;
+        } else if (input === "earth science") {
+            return 65;
+        } else if (input === "energy") {
+            return 72;
+        } else if (input === "physics") {
+            return 65;
+        } else if (input === "middle school") {
+            return 295;
+        }
+    }
 };

@@ -9,32 +9,45 @@ AWS.config.update({ 'region': 'us-east-2' });
 
 module.exports = {
     choose_question: (level, subject) => {
-        let id = Math.floor(Math.random() * consts.NUM_MS_QUESTIONS);
+        let table;
+        let id;
+        if (level === "middle school") {
+            table = "ms_questions";
+            id = Math.floor(Math.random() * consts.num_questions(level));
+        } else if (level === "high school") {
+            table = "hs_" + subject;
+            id = Math.floor(Math.random() * consts.num_questions(subject));
+        }
         params = {
             Key: {
                 "id": {
                     N: id.toString()
                 }
             },
-            TableName: "ms_questions"
+            TableName: table
         }
         const dynamodb = new AWS.DynamoDB();
-        dynamodb.getItem(params, (err, item) => {
-            if (err) {
-                console.log("dynamodb query errors", err);
-            } else {
-                console.log("dynamodb query item", item);
-                let res = {};
-                res.question = item.question.S;
-                res.answer = item.answer.S;
-                res.id = id;
-                return res;
-            }
+        return new Promise((resolve, reject) => {
+            dynamodb.getItem(params, (err, item) => {
+                if (err) {
+                    console.log("dynamodb query errors", err);
+                    reject(err);
+                } else {
+                    console.log("dynamodb query item", item);
+                    let res = {};
+                    res.question = item.Item.question.S;
+                    res.answer = item.Item.answer.S;
+                    res.id = item.Item.id.N;
+                    resolve(res);
+                }
+            });
         });
     },
 
     check_answer: (user_answer, original_answer) => {
-        return user_answer.ignoreCase === original_answer.ignoreCase;
+        console.log("user_answer", user_answer);
+        console.log("original_answer", original_answer);
+        return user_answer.includes(original_answer);
     },
 
     send_dialogflow_response: (speech, display_text, follow_up_event, res) => {
