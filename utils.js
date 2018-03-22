@@ -47,7 +47,7 @@ module.exports = {
     check_answer: (user_answer, original_answer) => {
         console.log("user_answer", user_answer);
         console.log("original_answer", original_answer);
-        return user_answer.includes(original_answer);
+        return user_answer.toLowerCase().includes(original_answer.toLowerCase()); //normalize for case
     },
 
     send_dialogflow_response: (speech, display_text, follow_up_event, res) => {

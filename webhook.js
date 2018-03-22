@@ -12,11 +12,11 @@ module.exports = {
         let action = req.body.result.action;
         let contexts = req.body.contexts; //array with multiple values
 
+        let inputs = req.body.result.parameters;
+        console.log("reached with params", inputs);
+
         if (action === 'setup') {
             console.log("setup invoked from webhook");
-
-            let inputs = req.body.result.parameters;
-            console.log("reached with params", inputs);
 
             level = inputs.level;
             subject = inputs.subject;
@@ -48,6 +48,22 @@ module.exports = {
             } else {
                 utils.send_dialogflow_response("Oh no, that's incorrect. Would you like to continue?", "Oh no, that's incorrect. Would you like to continue?", null, res);
             }
+        } else if (action === 'switch_params') {
+            console.log("switch params invoked");
+
+
+            if (inputs.level) {
+                level = inputs.level;
+            }
+            if (inputs.subject) {
+                subject = inputs.subject;
+            }
+
+            //get a question from db
+            utils.choose_question(level, subject).then(data => {
+                db_data = data;
+                utils.send_dialogflow_response(db_data.question, db_data.question, null, res);
+            });
         }
     }
 }
